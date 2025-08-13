@@ -1,12 +1,11 @@
 FROM node:22-alpine
 
+RUN npx next telemetry disable
+
 WORKDIR /Swarch2A_Frontend
 
 COPY package*.json ./
 RUN npm install
-
-# Disable Next.js telemetry
-RUN npx next telemetry disable
 
 COPY . .
 
@@ -17,8 +16,6 @@ ARG APP_MODE=prod
 ENV APP_MODE=${APP_MODE}
 
 EXPOSE 3000
-
-RUN echo "Running in $APP_MODE mode"
 
 RUN npm run pre:${APP_MODE}
 

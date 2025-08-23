@@ -1,11 +1,11 @@
 FROM node:22-alpine
 
-RUN npx next telemetry disable
-
 WORKDIR /Swarch2A_Frontend
 
 COPY package*.json ./
 RUN npm install
+
+RUN npx next telemetry disable
 
 COPY . .
 

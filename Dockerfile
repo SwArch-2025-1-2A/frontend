@@ -1,28 +1,31 @@
-FROM node:22-alpine
+FROM node:22-alpine AS base
 
-WORKDIR /Swarch2A_Frontend
+ENV NEXT_TELEMETRY_DISABLED=1
+
+FROM base AS deps
+
+WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
-# Disable Next.js telemetry
-RUN npx next telemetry disable
+FROM base AS build
 
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm run build
 
-# The default value is `prod`
-#   `prod` -> production
-#   `dev` -> development
-ARG APP_MODE=prod
-ENV APP_MODE=${APP_MODE}
+FROM base AS runtime
+
+WORKDIR /app
+
+COPY --from=build --chown=node:node /app/.next/standalone ./
+COPY --from=build --chown=node:node /app/.next/static ./.next/static
+COPY --from=build --chown=node:node /app/public ./public
 
 EXPOSE 3000
 
-RUN echo "Running in $APP_MODE mode"
-
-RUN npm run pre:${APP_MODE}
-
-CMD [\
-	"sh", "-c",\
-	"npm run ${APP_MODE:-prod}"\
-	]
+USER node
+CMD ["node", "server.js"]

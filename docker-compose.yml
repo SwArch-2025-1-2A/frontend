@@ -6,8 +6,6 @@
 x-mu-fe-common-config: &mu-fe-common-config
   build:
     context: .
-    args:
-      APP_MODE: ${mu_fe_MODE:-prod}
 
   environment:
     GRAPHQL_API: http://${mu_ag_HOSTNAME:-mu_ag}:${mu_ag_INTERNAL_PORT:-4000}/query

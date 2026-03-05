@@ -21,6 +21,8 @@ services:
     <<: *mu-fe-common-config
     hostname: ${mu_fe_HOSTNAME:-mu_fe}-1
     container_name: ${mu_fe_HOSTNAME:-mu_fe}-1
+    environment:
+      HOSTNAME: ${mu_fe_HOSTNAME:-mu_fe}-1
     profiles:
       - prod
 
@@ -28,6 +30,8 @@ services:
     <<: *mu-fe-common-config
     hostname: ${mu_fe_HOSTNAME:-mu_fe}-2
     container_name: ${mu_fe_HOSTNAME:-mu_fe}-2
+    environment:
+      HOSTNAME: ${mu_fe_HOSTNAME:-mu_fe}-2
     profiles:
       - prod
 
@@ -35,6 +39,8 @@ services:
     <<: *mu-fe-common-config
     hostname: ${mu_fe_HOSTNAME:-mu_fe}-3
     container_name: ${mu_fe_HOSTNAME:-mu_fe}-3
+    environment:
+      HOSTNAME: ${mu_fe_HOSTNAME:-mu_fe}-3
     profiles:
       - prod
 
@@ -49,5 +55,7 @@ services:
     hostname: ${mu_fe_HOSTNAME:-mu_fe}
     ports:
       - ${mu_fe_EXPOSED_PORT:-3000}:3000
+    environment:
+      HOSTNAME: ${mu_fe_HOSTNAME:-mu_fe}
     profiles:
       - dev
